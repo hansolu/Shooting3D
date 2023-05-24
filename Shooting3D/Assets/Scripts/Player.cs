@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    static Player instance = null;
+    public static Player Instance  = null;
+    
     public Transform GunObjTr; //총기의 트랜스폼
     public Transform Holster; //총기 손에 안쥐었을때의 위치
     public Transform Gun_HandTr; //총기 손에 쥐어주기 위한 위치.
+
+    public Transform GunShotTr; //총기의 총구.. 트랜스폼..
+
+    public GameObject bulletPrefab;
 
     Gun gun; //내가 가진 총의 총알 생성할 위치 받아오기 위함.
 
@@ -25,8 +32,13 @@ public class Player : MonoBehaviour
     Vector2 scroll = Vector2.zero;
     public Camera cam;
     Ray ray;
-    RaycastHit hit;        
-    
+    RaycastHit hit;
+
+    void Awake()
+    {
+        Instance = this;
+        DontDestroyOnLoad(this);
+    }
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -34,8 +46,8 @@ public class Player : MonoBehaviour
         speed = originSpeed;
         IsAbleShoot = true; //시작시에 언제든 쏘기 가능상태여야하고
         IsShoot = false;  //쏘지는 않은 상태 세팅.
-    }
-    
+    }    
+
     void Update()
     {              
         x = Input.GetAxisRaw("Horizontal");
@@ -44,56 +56,71 @@ public class Player : MonoBehaviour
         pos.z = z;                
         pos.Normalize(); //대각선 이라고 좀더 빨라지는 현상을 없앨 수 있음.        
 
-        if (x == 0 && z == 0)
-        {
-            anim.SetBool("IsRun", false);
-        }
-        else //뭐라도 누른 상태.
-        {
-            anim.SetBool("IsRun", true);
-
-            #region 키보드를 눌러서 회전 시킴
-            //if (x < 0) //왼쪽을 눌렀을때
-            //{
-            //    transform.Rotate(Vector3.up, -0.4f); //왼쪽으로 회전
-            //}
-            //else if (x > 0) //오른쪽 눌렀을때
-            //{
-            //    transform.Rotate(Vector3.up, 0.4f); //오른쪽 으로 회전
-            //}
-            //else
-            //{
-            //    if (z < 0) //아래키를 누르고 있음
-            //    {
-            //        if (transform.rotation.y !=0 && transform.rotation.y != 180)//정방향이 아닌 상태라면
-            //        {
-            //            transform.rotation = Quaternion.Lerp/*Unclamped*/(transform.rotation, Quaternion.Euler(0, 180, 0), Time.deltaTime); 
-            //            //180도 . 모니터쪽을 향하여 부드럽게 회전시킴
-            //        }                    
-            //    }
-            //    else if(z > 0)
-            //    {
-            //        transform.rotation = Quaternion.Lerp/*Unclamped*/(transform.rotation, Quaternion.identity, Time.deltaTime);
-            //        //0,0,0 방향(위쪽)을 보도록 부드럽게 회전시킴.
-            //    }                
-            //}
-            #endregion
-        }
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            anim.SetBool("IsWalk", true);
+        {            
             speed = originSpeed * 0.5f;
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            anim.SetBool("IsWalk", false);
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {            
             speed = originSpeed;
         }
 
+        if (x == 0 && z == 0)
+        {
+            anim.SetFloat("Speed", 0);
+            //anim.SetBool("IsRun", false);
+        }
+        else
+        {
+            anim.SetFloat("Speed", speed);
+            anim.SetFloat("PosX", x);
+            anim.SetFloat("PosZ", z);
+        }
+
+        #region 이전코드
+        //else //뭐라도 누른 상태.
+        //{
+        //    //anim.SetBool("IsRun", true);
+
+        //    #region 키보드를 눌러서 회전 시킴
+        //    //if (x < 0) //왼쪽을 눌렀을때
+        //    //{
+        //    //    transform.Rotate(Vector3.up, -0.4f); //왼쪽으로 회전
+        //    //}
+        //    //else if (x > 0) //오른쪽 눌렀을때
+        //    //{
+        //    //    transform.Rotate(Vector3.up, 0.4f); //오른쪽 으로 회전
+        //    //}
+        //    //else
+        //    //{
+        //    //    if (z < 0) //아래키를 누르고 있음
+        //    //    {
+        //    //        if (transform.rotation.y !=0 && transform.rotation.y != 180)//정방향이 아닌 상태라면
+        //    //        {
+        //    //            transform.rotation = Quaternion.Lerp/*Unclamped*/(transform.rotation, Quaternion.Euler(0, 180, 0), Time.deltaTime); 
+        //    //            //180도 . 모니터쪽을 향하여 부드럽게 회전시킴
+        //    //        }                    
+        //    //    }
+        //    //    else if(z > 0)
+        //    //    {
+        //    //        transform.rotation = Quaternion.Lerp/*Unclamped*/(transform.rotation, Quaternion.identity, Time.deltaTime);
+        //    //        //0,0,0 방향(위쪽)을 보도록 부드럽게 회전시킴.
+        //    //    }                
+        //    //}
+        //    #endregion
+        //}
+#endregion
+
+        
+
         if (IsAbleShoot == false)//타이머 필요..
         {
-            //#########
+            shootTimer += Time.deltaTime;
+            if (shootTimer >= shootDelayTime)
+            {
+                IsAbleShoot = true;
+                shootTimer = 0;
+            }
         }
         
 
@@ -109,8 +136,15 @@ public class Player : MonoBehaviour
             GunObjTr.localRotation = Quaternion.identity;
         }
         else if (Input.GetMouseButton(0)) //일정시간마다 쏘는 행위
-        {            
+        {
             //일정시간 조건 만족해서 공격 가능 => 총알 생성...
+            if (IsAbleShoot)
+            {
+                IsShoot = true; //쏠것임
+                //쏘다
+                //CreateBullet();
+                IsAbleShoot = false;
+            }
             //gun.BulletPointTr ;
         }
         else if (Input.GetMouseButtonUp(0)) //공격 상태 해제
@@ -149,4 +183,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Hit(float damage)
+    {
+        Debug.Log("피격");
+    }
+    public void CreateBullet() //총알 만들어냄.
+    {
+        Debug.Log("CreateBullet 불림");
+        if (IsShoot)
+        {
+            IsShoot = false;
+            GameObject _obj = Instantiate(bulletPrefab);
+            _obj.GetComponent<Bullet>().SetInit(GunShotTr);
+        }        
+    }
 }
