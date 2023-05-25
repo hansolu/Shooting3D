@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{
-    static Player instance = null;
-    public static Player Instance  = null;
-    
+{        
     public Transform GunObjTr; //총기의 트랜스폼
     public Transform Holster; //총기 손에 안쥐었을때의 위치
     public Transform Gun_HandTr; //총기 손에 쥐어주기 위한 위치.
@@ -23,6 +20,8 @@ public class Player : MonoBehaviour
     float originSpeed = 4;
     float speed = 0;
 
+
+    bool IsGunReady = false; //총을 들어올린상태인지
     bool IsShoot = false; //쐈음
     bool IsAbleShoot = true; //총 쏘기가 가능해질때 true가 됨.
     float shootDelayTime = 1f; //총 쏘는 간격
@@ -33,12 +32,7 @@ public class Player : MonoBehaviour
     public Camera cam;
     Ray ray;
     RaycastHit hit;
-
-    void Awake()
-    {
-        Instance = this;
-        DontDestroyOnLoad(this);
-    }
+      
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -46,6 +40,8 @@ public class Player : MonoBehaviour
         speed = originSpeed;
         IsAbleShoot = true; //시작시에 언제든 쏘기 가능상태여야하고
         IsShoot = false;  //쏘지는 않은 상태 세팅.
+        IsGunReady = false; 
+        GameManager.Instance.SetPlayer(this);
     }    
 
     void Update()
@@ -113,7 +109,7 @@ public class Player : MonoBehaviour
 
         
 
-        if (IsAbleShoot == false)//타이머 필요..
+        if (IsAbleShoot == false )//타이머 필요..
         {
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootDelayTime)
@@ -128,8 +124,10 @@ public class Player : MonoBehaviour
         {
             if (IsAbleShoot == false) //쏠수없는 상태면 돌아가기.
             {
+                IsGunReady = false;
                 return;
-            }                        
+            }
+            //IsGunReady = true; //요거 조차도 팔을 쏘기 직전 에임이 끝난상태일때 세팅해주는 것이 좋을것같음.
             anim.SetBool("IsShoot", true);
             GunObjTr.SetParent(Gun_HandTr); //총 손위치로 달아둠
             GunObjTr.localPosition = Vector3.zero; //나의 부모와 일치 시켜줌.
@@ -138,18 +136,22 @@ public class Player : MonoBehaviour
         else if (Input.GetMouseButton(0)) //일정시간마다 쏘는 행위
         {
             //일정시간 조건 만족해서 공격 가능 => 총알 생성...
-            if (IsAbleShoot)
+            if (IsGunReady && IsAbleShoot)
             {
+                IsAbleShoot = false;
                 IsShoot = true; //쏠것임
                 //쏘다
-                //CreateBullet();
-                IsAbleShoot = false;
+                //CreateBullet();                
             }
             //gun.BulletPointTr ;
         }
         else if (Input.GetMouseButtonUp(0)) //공격 상태 해제
-        {            
-            anim.SetBool("IsShoot", false);            
+        {
+            if (IsGunReady)
+            {
+                SetIsGunReady( false);
+                anim.SetBool("IsShoot", false);
+            }            
         }
 
 
@@ -183,18 +185,25 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void SetIsGunReady(bool _on)
+    {
+        Debug.Log("IsGunReady" + _on);
+        IsGunReady = _on;
+    }
     public void Hit(float damage)
     {
         Debug.Log("피격");
     }
-    public void CreateBullet() //총알 만들어냄.
+    public void Shoot() //총알 만들어냄.
     {
-        Debug.Log("CreateBullet 불림");
+    //    Debug.Log("CreateBullet 불림");
         if (IsShoot)
         {
+    //        Debug.Log("쐈당");
             IsShoot = false;
-            GameObject _obj = Instantiate(bulletPrefab);
-            _obj.GetComponent<Bullet>().SetInit(GunShotTr);
+    //        //GameObject _obj = Instantiate(bulletPrefab);
+    //        //_obj.GetComponent<Bullet>().SetInit(GunShotTr);
+            GameManager.Instance.CreateBullet(GunShotTr);
         }        
     }
 }
