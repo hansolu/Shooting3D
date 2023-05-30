@@ -15,6 +15,11 @@ public class NavAgentTest : MonoBehaviour
     Vector3 startpos, endpos = Vector3.zero;
     RaycastHit hit;
     Coroutine cor = null;
+
+    //void Awake() //인풋매니저 더하는 경우의 샘플.
+    //{
+    //    InputManager.Instance.AddFunction(KeyCode.Space, AA );
+    //}
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -26,8 +31,12 @@ public class NavAgentTest : MonoBehaviour
         agent.autoBraking = false;
         patrolNum = 0;
         cor = null;
-        //GoToNextPoint();
+        //GoToNextPoint();                
     }
+    //public void AA() //인풋매니저 더하는 경우의 샘플.
+    //{
+    //    StartCoroutine(MoveMeshLink());
+    //}
 
     void GoToNextPoint() //정찰
     {
