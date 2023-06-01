@@ -1,5 +1,14 @@
 public class CTEnum
 {
+    public enum ItemIndex
+    { 
+        apple,
+        armor,
+        axe,
+        bag,
+        belts,
+        book
+    }
     public enum UIInvenKind
     {
         Player,//플레이어
@@ -8,7 +17,7 @@ public class CTEnum
     }
     public enum ItemKind
     { 
-        Food, //먹는 종류 음식, 포션
+        Food = 0, //먹는 종류 음식, 포션
         Armor, //입는 종류 갑옷류..
         Weapon, //무기 종류
         

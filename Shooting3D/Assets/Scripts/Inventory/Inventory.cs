@@ -41,15 +41,14 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
         InvenCount = invencount;
         for (int i = 0; i < InvenCount; i++)
         {
-            ItemDic.Add(i, /*null*/new Item());
+            ItemDic.Add(i, /*null*/new Item()); //슬롯이자 아이템 정보... 
             //나의 아이템 컬렉션 채우기...
         }
     }
 
-    public void InitLoad()
-    {
-
-    }
+    //public void InitLoad() //불러오기 적용 하게되면 채울것임..
+    //{
+    //}
 
     public List<Item> GetAllItemInfo()
     {
@@ -80,12 +79,13 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
                 if (ItemDic[i].AbleCount >= _item.Count) //그대로 넣을수 있음.
                 {
                     _item.SetCount(ItemDic[i].AddCount(_item.Count));                    
-                    //UIManager.Instance.DrawSlot(Index, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
+                    UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
                     break;
                 }
                 else //많아서 나머지는 다른칸에 마저 넣어야함.
                 {
                     _item.SetCount( ItemDic[i].AddCount(_item.Count));
+                    UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
                 }                
             }            
         }
@@ -98,6 +98,9 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
                 {
                     ItemDic[i].SetItem(_item);
                     _item.SetCount(0);
+
+                    UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
+                    break;
                 }
             }
 
