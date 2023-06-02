@@ -16,13 +16,14 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
     public CTEnum.UIInvenKind InvenKind { get; private set; } //사람의 인벤인지 보관함인지 뭔가.. 
     public int Index { get; private set; } = 0; //인벤토리의 고유번호 //인벤토리 고유번호 관리하는 부분이 어디 따로있어야할것.
     public int InvenCount { get; private set; } = 0; //인벤의 슬롯 최대칸수
+    //public int InvenCount => ItemDic.Count;
 
     ////만약 아이템 칸을 반드시 한정 짓고 싶고, 한정지어서 편하게 관리 하고싶다. //포문가능
     //Item[] ItemArr;//= new Item[10];  // 0 0 0 0 0 
     //                                  // 0 0 0 0 0
 
     ////자동정렬 및 인벤토리 가변성 있음
-    //List<Item> ItemList = new List<Item>(); //Item 이 count가 0이됐을떄 없애지 않는 경우가 아니라면
+    List<Item> ItemList = new List<Item>(); //Item 이 count가 0이됐을떄 없애지 않는 경우가 아니라면
     ////왠만하면 순서대로 값이 다 차있어서 //여튼 count로 포문 돌리기가 가능
     
     //자동정렬 없고 가변적인 배열처럼 관리하고 싶음. //근데 얘는 포문 안됨....유의
@@ -82,11 +83,11 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
                     UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
                     break;
                 }
-                else //많아서 나머지는 다른칸에 마저 넣어야함.
-                {
-                    _item.SetCount( ItemDic[i].AddCount(_item.Count));
-                    UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
-                }                
+                //else //많아서 나머지는 다른칸에 마저 넣어야함.
+                //{
+                //    _item.SetCount( ItemDic[i].AddCount(_item.Count));
+                //    UIManager.Instance.DrawSlot(InvenKind, i, ItemDic[i]); // 인벤토리 고유번호, 슬롯번호, 아이템정보..
+                //}                
             }            
         }
 
@@ -116,7 +117,7 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
     }
 
     public Item AddSlot(int slotnum, Item _item)//특정 슬롯에다가 내가 더하는 행위를 했음.
-    {
+    {        
         if (ItemDic[slotnum].Index == _item.Index) //같은 아이템
         {
             //판별해서 그냥 더해줌
@@ -158,9 +159,9 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
         }
         return isablecount;
     }
-    public bool SubSimple(int index, int count) //제작 내지 상점에서 거래.. 내가 가진 아이템중 특정 아이템과 특정 개수판별
-    {
-        int isablecount = GetIsAbleCount(index, count);        
+    public bool SubSimple(int itemIndex, int count ) //제작 내지 상점에서 거래.. 내가 가진 아이템중 특정 아이템과 특정 개수판별
+    {        
+        int isablecount = GetIsAbleCount(itemIndex, count);        
         
         //내가 가진것 다 검색..
         if (isablecount < count)
@@ -171,7 +172,7 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
         {
             for (int i = 0; i < InvenCount; i++)
             {
-                if (ItemDic[i].Index == index)
+                if (ItemDic[i].Index == itemIndex)
                 {
                     count = ItemDic[i].SubCount(count);
                     if (count == 0)
@@ -185,7 +186,7 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
     }
 
     public Item SubSlot(int slotnum) //특정 슬롯째로 빼기.
-    {
+    {        
         Item temp = new Item();
         temp.SetItem(ItemDic[slotnum]);
         ItemDic[slotnum].Clear();

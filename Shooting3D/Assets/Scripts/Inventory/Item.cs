@@ -20,6 +20,10 @@ public class Item  //얘도 후에 저장 및 아이템테이블에서의 정보 세팅 등을 생각하�
     public int Index { get; private set; } //고유 아이템인덱스
     public int MaxCount { get; private set; } = 0; //public 이므로 조심해야함. 소지할수 있는 최대 아이템 개수
 
+
+
+
+
     //슬롯에서의 기능
     public int Count { get; private set; } = 0; //public 이므로 조심해야함. 현재 내가 소지하고 있는 아이템 개수    
     
@@ -37,6 +41,13 @@ public class Item  //얘도 후에 저장 및 아이템테이블에서의 정보 세팅 등을 생각하�
         Count = count;
         Index = index;
         MaxCount = maxcount;
+    }
+    public Item(Item item)
+    {
+        itemKind = item.itemKind;
+        Count = item.Count;
+        Index = item.Index;
+        MaxCount = item.MaxCount;
     }
            
     public void Clear()

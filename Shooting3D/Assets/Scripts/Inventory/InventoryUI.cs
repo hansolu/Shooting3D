@@ -77,8 +77,11 @@ public class InventoryUI : MonoBehaviour //
         }
         else
         {
-            Debug.Log("인벤토리ui의 DrawSlot 그려내기" + _slotnum);
-            SlotList[_slotnum].SetItemDraw(_iteminfo.Count >=0? true: false, ResourceManager.Instance.ItemSprites[_iteminfo.Index], _iteminfo.Count.ToString());
+            //Debug.Log("인벤토리ui의 DrawSlot 그려내기" + _slotnum);            
+                    
+            SlotList[_slotnum].SetItemDraw(_iteminfo.Count > 0? true: false,
+                _iteminfo.Index < 0 ? null : ResourceManager.Instance.ItemSprites[_iteminfo.Index],
+                _iteminfo.Count.ToString());
         }
     }
 }

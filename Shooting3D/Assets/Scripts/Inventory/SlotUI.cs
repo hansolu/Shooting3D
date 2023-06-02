@@ -5,9 +5,12 @@ using System.Collections.Generic;
 
 public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    CTEnum.UIInvenKind UIInvenKind;
+    public CTEnum.UIInvenKind UIInvenKind { get; private set; }
     public int InventoryIndex = 0; 
     public int SlotIndex = 0;
+
+    List<RaycastResult> results = new List<RaycastResult>();    
+    GraphicRaycaster graphicRay;
 
     Image ItemImg = null;
     Text ItemTxt = null;
@@ -19,6 +22,7 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
     //슬롯 정보 세팅
     public void Init(CTEnum.UIInvenKind _uiInvenKind, int _inventoryIdx, int _slotIndex)
     {
+        graphicRay = UIManager.Instance.canvas.gameObject.GetComponent<GraphicRaycaster>();
         UIInvenKind = _uiInvenKind;
         InventoryIndex = _inventoryIdx;
         SlotIndex = _slotIndex;
@@ -137,15 +141,17 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, ID
 
         TempNextSlot = null;
 
-        //#########다른 방법이었던것같은데 다시 알아올게요...
-        var result = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, result);
+        //var result = new List<RaycastResult>();
+        //EventSystem.current.RaycastAll(eventData, result);        
+        results.Clear(); //이전에 리스트가 채워져있었다면 일단 비워내고.
 
-        for (int i = 0; i < result.Count; i++)
+        graphicRay.Raycast(eventData, results);
+         
+        for (int i = 0; i < results.Count; i++)
         {
-            if (result[i].gameObject.GetComponent<SlotUI>())
-            {
-                TempNextSlot = result[i].gameObject.GetComponent<SlotUI>();
+            TempNextSlot = results[i].gameObject.GetComponent<SlotUI>();
+            if (TempNextSlot !=null)
+            {                
                 break;
             }
         }
