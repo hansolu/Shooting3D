@@ -147,7 +147,15 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
         return _item; //이거는 받는 쪽에서 아직 들고있는지 아닌지 판별하게 합시다.
     }
 
-    public int GetIsAbleCount(int index, int count)
+    //public bool IsExist(int index, int count)
+    //{ 
+    //    //내 인벤 검색해서
+    //    //해당 index 아이템이 있는지, count 개수만큼 있는게 맞는지
+
+    //    //그 여부 리턴
+    //}
+
+    public int GetIsAbleCount(int index)
     {
         int isablecount = 0;
         for (int i = 0; i < InvenCount; i++)
@@ -161,7 +169,7 @@ public class Inventory //인벤토리 매니저를 따로 두든 / 각 객체에 달아놓든..
     }
     public bool SubSimple(int itemIndex, int count ) //제작 내지 상점에서 거래.. 내가 가진 아이템중 특정 아이템과 특정 개수판별
     {        
-        int isablecount = GetIsAbleCount(itemIndex, count);        
+        int isablecount = GetIsAbleCount(itemIndex);        
         
         //내가 가진것 다 검색..
         if (isablecount < count)
