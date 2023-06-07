@@ -16,7 +16,27 @@ public class ResourceManager : SingletonMono<ResourceManager>
     {
         //_index는 ItemKind에 속하는 인덱스 (랜덤으로 돌리도록 )
         int index = Random.Range(0, 5 /*_kind의 마지막 번호*/);
-        return new Item(_kind, index, 1, 5);
+        //return new Item(_kind, index, 1, 5);
+        switch (_kind)
+        {
+            case CTEnum.ItemKind.Food:
+                return new Item(_kind, 0, 1, 5);                
+            case CTEnum.ItemKind.Armor:
+                return new Item(_kind, 1, 1, 5);
+            case CTEnum.ItemKind.Weapon:
+                return new Item(_kind, 2, 1, 5);
+            case CTEnum.ItemKind.Bag:
+                
+                break;
+            case CTEnum.ItemKind.Material:
+                break;
+            case CTEnum.ItemKind.End:
+                break;
+            default:
+                break;
+        }
+
+        return new Item(_kind, 0, 1, 5);
     }
 
     public Item CreateItem(int _index)

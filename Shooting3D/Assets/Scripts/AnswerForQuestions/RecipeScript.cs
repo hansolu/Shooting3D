@@ -33,8 +33,8 @@ public struct MaterialCombo
 
 public struct MaterialList
 {
-    public List<MaterialName> mat;
-    public List<int> count;    
+    public List<MaterialName> mat ;
+    public List<int> count;       
 }
 
 public class RecipeScript : MonoBehaviour

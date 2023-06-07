@@ -39,17 +39,17 @@ public class ForInvenPlayer : MonoBehaviour //그냥 어쩄거나 사람..
 
         if (Input.GetKeyDown(KeyCode.Space)) //아이템 주웠다고 가정
         {            
-            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Food, 0), InventoryIndex);
+            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Food), InventoryIndex);
         }
 
         if (Input.GetKeyDown(KeyCode.Z)) //아이템 주웠다고 가정
         {
-            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Armor, 1), InventoryIndex);
+            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Armor), InventoryIndex);
         }
 
         if (Input.GetKeyDown(KeyCode.X)) //아이템 주웠다고 가정
         {
-            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Weapon, 2), InventoryIndex);
+            InvenManager.Instance.AddItem(ResourceManager.Instance.CreateItem(CTEnum.ItemKind.Weapon), InventoryIndex);
         }
     }
 }
