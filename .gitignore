@@ -75,3 +75,11 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # End of https://www.toptal.com/developers/gitignore/api/unity
+Shooting3D/Assets/Resource_Graphics/FreeTestCharacterAsuna
+Shooting3D/Assets/Resource_Graphics/MilkyWay
+Shooting3D/Assets/Resource_Graphics/RPG_inventory_icons
+Shooting3D/Assets/Resource_Graphics/YughuesFreeMetalMaterials
+Shooting3D/Assets/Resource_Graphics/Material.meta
+Shooting3D/Assets/Resource_Graphics/MilkyWay.meta
+Shooting3D/Assets/Resource_Graphics/RPG_inventory_icons.meta
+Shooting3D/Assets/Resource_Graphics/YughuesFreeMetalMaterials.meta
