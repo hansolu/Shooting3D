@@ -3,7 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Singleton
-{ 
+{
+    public class Singletonn<T> : MonoBehaviour where T : Singletonn<T>
+    {
+        public static Singletonn<T> Instance = null;
+
+        protected virtual void Awake() //À¯´ÏÆ¼¿¡¼­ Á¤ÇØµÐ ÇÔ¼öÁö¸¸...
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            Debug.Log("½Ì±ÛÅæ¤¤¤¤ÀÇ ¾î¿þÀÌÅ©");
+            Init();
+        }
+
+        public virtual void Init()
+        {
+            Debug.Log("½Ì±ÛÅæ¤¤ÀÌ´Ö");
+        }
+    }
+
     public class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         protected static T _instance;
