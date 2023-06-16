@@ -27,5 +27,29 @@ public class GameMgr : MonoBehaviour
             Destroy(this.gameObject);
         }        
     }              
+}
 
+//싱글톤 유의
+public class Singletonn<T> : MonoBehaviour where T : Singletonn<T>
+{
+    public static Singletonn<T> Instance = null;
+
+    void Awake() //유니티에서 정해둔 함수지만...
+    {
+        Instance = this;
+        DontDestroyOnLoad(this.gameObject);
+        Init();
+    }
+
+    public virtual void Init()
+    {
+    }
+}
+
+public class AA2 : Singletonn<AA2>
+{
+    public override void Init()
+    {
+        //해야할거...
+    }
 }
