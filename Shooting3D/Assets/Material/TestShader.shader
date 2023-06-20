@@ -62,7 +62,7 @@ Shader "Custom/TestShader"
             //o.Emission = c1.rgb * c2.rgb;
             o.Emission = lerp(c1, c2, 0 /*1-( c1.a * _BlendVal)*/); //c.rgb+ _Bright;//_Color.r; /*(0,1,0,1)*/ /*+ float3(1, 0, 0)*/;            
             //o.Emission = float3(_Color.b, _Color.g, _Color.r) ; //float3(_Color.b, _Color.g, _Color.r) == _Color.bgr //float3(_GlowR, _GlowG, _GlowB); //0~ 0.****** ~ 1   => 0 (0,0,0) // 1 (1,1,1)
-            //o.Metallic = _Metallic;
+            //o.Metallic = _Metallic;            
             //o.Smoothness = _Glossiness;
             //o.Alpha = c1.a * c2.a;
                         
