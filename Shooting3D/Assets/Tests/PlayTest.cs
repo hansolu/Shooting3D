@@ -32,8 +32,24 @@ public class PlayTest
     {
         var gameobj = new GameObject();
         var probs = gameobj.AddComponent<Problems>();        
-        Assert.AreNotEqual(probs.TestVal(3), 7); //달라야 True인데 같은 값이기때문에
+        Assert.AreNotEqual(probs.TestVal(3), 6
+            ); //달라야 True인데 같은 값이기때문에
         //Falseㄹ를 반환함
         
-    }        
+    }
+
+    [Test]
+    public void MultiThreadCheck()
+    {
+        var gameobj = new GameObject();
+        var multiCheck = gameobj.AddComponent<MultiThread>(); //실제 멀티스레드
+        multiCheck.ForTestCheck();
+    }
+    [Test]
+    public void NonMultiThreadCheck()
+    {
+        var gameobj = new GameObject();
+        var multiCheck = gameobj.AddComponent<MultiThread_1>(); //멀티스레드 안쓴것.
+        multiCheck.ForTestCheck();
+    }
 }
