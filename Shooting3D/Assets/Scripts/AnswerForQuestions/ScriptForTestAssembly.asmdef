@@ -1,0 +1,16 @@
+{
+    "name": "ScriptForTestAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:39078092b550cff42812130f76a50f2e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
